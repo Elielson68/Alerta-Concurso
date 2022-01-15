@@ -21,6 +21,15 @@ def get_data_pci(d):
         data = d.find("div", {"class": "ce"}).text
     return data
 
+def get_json_data(d):
+
+    data = {
+        "link": d.a["href"],
+        "titulo": d.a.text,
+        "data_limite": d.find_all("span")[-1].text
+    }
+    return data
+
 def get_concursos_pci():
     response = get("https://www.pciconcursos.com.br/concursos/norte/")
     texto = response.text
@@ -29,4 +38,5 @@ def get_concursos_pci():
     concursos_pa = [c for c in concursos if "PA" in c.text]
     concursos_pa_medio = [c for c in concursos_pa if "Médio" in c.span.text]
     concursos_pa_medio_validos = [c for c in concursos_pa_medio if filtro_concurso_valido(get_data_pci(c))]
-    return concursos_pa_medio_validos
+    concursos_jsonificados = [get_json_data(c) for c in concursos_pa_medio_validos]
+    return concursos_jsonificados
