@@ -1,1 +1,1 @@
-web: gunicorn main.py -w 1
+web: gunicorn wsgi:app -w 1
